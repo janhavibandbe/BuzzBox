@@ -11,6 +11,7 @@ export const useChatStore = create((set, get) => ({
     isMessagesLoading: false,
 
     getUsers: async () => {
+        debugger;
         set({isUsersLoading: true});
 
         try {
@@ -24,6 +25,7 @@ export const useChatStore = create((set, get) => ({
     },
 
     getMessages: async (userId) => {
+        debugger;
         set({isMessagesLoading: true});
 
         try {
@@ -37,6 +39,7 @@ export const useChatStore = create((set, get) => ({
     },
 
     sendMessages: async (messageData) => {
+        debugger;
         const { selectedUser, messages } = get();
 
         try {
