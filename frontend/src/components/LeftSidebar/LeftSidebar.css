@@ -1,0 +1,118 @@
+.ls{
+    background: #001030;
+    color: white;
+    height: 85vh;
+}
+.ls-top{
+    padding: 20px;
+}
+.ls-nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.ls-nav .logo{   
+    max-width: 40px;
+}
+.ls-nav .menu img{
+    max-height: 20px;
+    opacity: 0.6;
+    cursor: pointer;
+}
+.ls-search{
+    background-color: #002670;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    margin-top: 20px;
+}
+.ls-search img{
+    width: 16px;
+}
+.ls-search input{
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 11px;
+}
+.ls-search input::placeholder{
+    color: #c8c8c8;
+}
+.ls-list{
+    display: flex;
+    flex-direction: column;
+    height: 70%;
+    overflow-y: scroll;
+}
+.friends img{
+    width: 35px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+.friends{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: 13px;
+}
+.selectedFriend{
+    background-color: #077EFF;
+}
+.friends div{
+    display: flex;
+    flex-direction: column;
+}
+.friends span{
+    color: #9f9f9f;
+    font-size: 11px;
+}
+.friends:hover{
+    background-color: #077EFF;
+}
+.friends:hover span{
+    color: white;
+}
+.ls-nav .menu{
+    position: relative;
+    padding: 10px 0px;
+}
+
+.menu .menu-icon{
+    background: transparent;
+}
+
+.menu .sub-menu{
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 130px;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+}
+.sub-menu .sub-menu-options{
+    text-decoration: none;
+    color: black;
+}
+.sub-menu hr{
+    border: none;
+    height: 1px;
+    background: #a4a4a4;
+    margin: 8px 0px;
+}
+.sub-menu{
+    cursor: pointer;
+    font-size: 14px;
+}
+
+
+.userNotFound{
+    text-align: center;
+    font-size: 11px;
+    color: #c8c8c8;
+}

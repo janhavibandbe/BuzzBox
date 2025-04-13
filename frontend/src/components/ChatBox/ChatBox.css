@@ -1,0 +1,333 @@
+.chat-box{
+  height: 85vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: #f1f5ff;  
+}
+.chat-user{
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #c6c6c6;
+}
+.chat-user img{
+  width: 25px;
+  border-radius: 50%
+}
+.chat-user img:first-child{
+  width: 38px;
+  aspect-ratio: 1/1;
+}
+.chat-user p{
+  flex: 1;
+  font-weight: 500;
+  font-size: 20px;
+  color: #393939;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.chat-input{
+  width: 100%;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+.chat-input img{
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+.chat-msg{
+  height: calc(100% - 70px);
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.s-msg,.r-msg{
+  display: flex;
+  align-items: end;
+  justify-content: end;
+  gap: 5px;
+  padding: 0px 15px;
+}
+.r-msg{
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: start;
+}
+.msg{
+  color: white;
+  background-color: #077EFF;
+  padding: 8px;
+  max-width: 400px;
+  font-size: 15px;
+  font-weight: 300;
+  border-radius: 8px 8px 0px 8px;
+  margin-bottom: 30px;
+}
+.r-msg .msg{
+  border-radius: 8px 8px 8px 0px;
+}
+
+.chatBox-profile{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+ }
+ 
+.msgImg{
+  width: 200px;
+  height: auto;
+}
+.message-time{
+  font-size: 12px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.image-preview-container {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .image-wrapper {
+    position: relative;
+  }
+  
+  .image-wrapper .imagePreview {
+    width: 5rem;
+    height: 5rem;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #444;
+  }
+  
+  .remove-image-button {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .remove-icon {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .chat-form {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .chat-input-container {
+    flex: 1;
+    display: flex;
+    gap: 8px;
+  }
+
+  .emoji-picker-container{
+    position: absolute;
+    bottom: 3.8rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .emoji-picker-container .close-picker-container{
+    position: relative;
+    left: 0.4rem;
+    top: 0.4rem;
+    align-self: flex-end;
+    padding: 0.4rem;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+  }
+  
+  .chat-text-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  .gallery-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .send-button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  
+  .send-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+.datetime-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  width: 90%;
+  max-width: 400px;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Close Button */
+.close-datetime-modal {
+  position: absolute;
+  right: 0.4rem;
+  top: 0.4rem;
+  /* align-self: flex-end; */
+  background-color: #f3f4f6;
+  padding: 0.4rem;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.close-datetime-modal:hover {
+  background-color: #e5e7eb;
+}
+
+/* Labels */
+.datetime-modal label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+/* DateTime Input */
+.schedule-time {
+  padding: 0.6rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.6rem;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.schedule-time:focus {
+  border-color: #077EFF;
+}
+
+/* Textarea */
+.schedule-msg {
+  padding: 0.6rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.6rem;
+  font-size: 0.9rem;
+  outline: none;
+  min-height: 80px;
+  resize: vertical;
+  transition: border-color 0.3s;
+}
+
+.schedule-msg:focus {
+  border-color: #077EFF;
+}
+
+.schedule-img {
+  background-color: #f9fafb;
+  padding: 0.5rem;
+  border-radius: 0.6rem;
+  border: 1px dashed #d1d5db;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.schedule-img:hover {
+  background-color: #f3f4f6;
+}
+
+.schedule-img img {
+  width: 24px;
+  height: 24px;
+}
+
+.schedule-img-preview{
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.schedule-img-preview img {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 0.5rem;
+  object-fit: cover;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.confirm-btn {
+  background-color: #077EFF;
+  color: white;
+  padding: 0.7rem;
+  border: none;
+  border-radius: 0.6rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.confirm-btn:hover {
+  background-color: #077EFF;
+}
