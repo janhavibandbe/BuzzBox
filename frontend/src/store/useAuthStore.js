@@ -16,6 +16,7 @@ export const useAuthStore = create((set, get) => ({
     verifyEmail: null,
 
     checkAuth: async () => {
+        debugger;
         try {
             const res = await axiosInstance.get("/auth/check");
 
@@ -65,6 +66,7 @@ export const useAuthStore = create((set, get) => ({
     },
 
     login: async (data) => {
+        debugger;
         set({isLoggingIn : true});
         try {
             const res = await axiosInstance.post("/auth/login", data);
