@@ -93,6 +93,18 @@ export const useAuthStore = create((set, get) => ({
         }
     },
 
+    getProfile: async () => {
+        debugger;
+        try {
+            const res = await axiosInstance.get("/auth/get-profile");
+            set({authUser: res.data});
+        } catch (error) {
+            toast.error(error.response.data.message);
+        } finally{
+            set({isUpdatingProfile: false});
+        }
+    },
+
     updateProfile: async (data) => {
         set({isUpdatingProfile : true});
         try {

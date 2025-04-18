@@ -4,7 +4,7 @@ import assets from '../../assets/assets'
 import { useChatStore } from '../../store/useChatStore';
 import { useAuthStore } from '../../store/useAuthStore';
 import { formatMessageTime, convertISTtoUTC } from '../../lib/utils';
-import { Smile, X } from 'lucide-react';
+import { Smile, X, Download, File, Paperclip  } from 'lucide-react';
 import toast from 'react-hot-toast';
 import EmojiPicker from 'emoji-picker-react';
 
@@ -15,6 +15,7 @@ const ChatBox = () => {
 
   const [text, setText] = useState("");
   const [imagePreview, setImagePrivew] = useState(null);
+  const [imageName, setImageName] = useState("");
   const fileInputRef = useRef(null);
   const scheduledFileInputRef = useRef(null);
   const { sendMessages, sendScheduledMessages } = useChatStore();
@@ -23,6 +24,7 @@ const ChatBox = () => {
   const [scheduledDateTime, setScheduledDateTime] = useState("");
   const [scheduledText, setScheduledText] = useState("");
   const [scheduledImgPreview, setScheduledImgPreview] = useState(null);
+  const [scheduledImgName, setScheduledImgName] = useState("");
 
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
@@ -40,11 +42,14 @@ const ChatBox = () => {
 
 
   const handleImageChange = (e) => {
+    debugger;
     const file = e.target.files[0];
-    if(!file.type.startsWith("image/")){
-      toast.error("Please select an image file");
-      return;
-    }
+    // if(!file.type.startsWith("image/")){
+    //   toast.error("Please select an image file");
+    //   return;
+    // }
+    if(!file) return;
+    setImageName(file.name);
 
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -55,6 +60,7 @@ const ChatBox = () => {
 
   const removeImage = () => {
     setImagePrivew(null);
+    setImageName("");
     if(fileInputRef.current) fileInputRef.current.value="";
   };
 
@@ -66,11 +72,13 @@ const ChatBox = () => {
       await sendMessages({
         text: text.trim(),
         image: imagePreview,
+        imageName: imageName,
       });
 
       //clear from
       setText("");
       setImagePrivew(null);
+      setImageName("");
       setShowEmojiPicker(false);
       if(fileInputRef.current) fileInputRef.current.value="";
     } catch (error) {
@@ -84,7 +92,9 @@ const ChatBox = () => {
   };
 
   const handleScheduledImage = async(e) => {
+    debugger;
     const file = e.target.files[0];
+    setScheduledImgName(file.name);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -95,6 +105,7 @@ const ChatBox = () => {
   };
 
   const handleScheduleMessage = async(e) => {
+    debugger;
     e.preventDefault();
     if(!scheduledText.trim() && !scheduledImgPreview && !scheduledDateTime) {
       toast.error("Please enter time and message");
@@ -104,6 +115,7 @@ const ChatBox = () => {
       toast.error("Timer has not scheduled");
       setScheduledText("");
       setScheduledImgPreview(null);
+      setScheduledImgName("");
     }
     else if(!scheduledText && !scheduledImgPreview){
       toast.error("No message found");
@@ -114,12 +126,14 @@ const ChatBox = () => {
         await sendScheduledMessages({
           text: scheduledText.trim(),
           image: scheduledImgPreview,
+          imageName: scheduledImgName,
           scheduledTime: scheduledDateTime,
         });
   
         //clear from
         setScheduledText("");
         setScheduledImgPreview(null);
+        setScheduledImgName("");
         setScheduledDateTime("");
         if(scheduledFileInputRef.current) scheduledFileInputRef.current.value="";
         setShowDateTimePicker(false);
@@ -154,7 +168,7 @@ const ChatBox = () => {
 
         
         <div className="chat-msg">
-          {messages.map((message) => {
+          {[...messages].reverse().map((message) => {
             return (  // Add a return here
               <div
                 key={message._id}
@@ -163,11 +177,55 @@ const ChatBox = () => {
               >
                 <div className="msg">
                   {message.image && (
-                    <img
-                      src={message.image}
-                      alt="Attachment"
-                      className="msgImg"
-                    />
+                    // <div className="relative inline-block">
+                    // <img
+                    //   src={message.image}
+                    //   alt="Attachment"
+                    //   className="msgImg"
+                    // />
+                    // <a href={message.image}
+                    //   download={message.imageName}
+                    //   className="absolute top-2 right-2 bg-white/80 p-1 rounded-full hover:bg-gray-200 transition"
+                    //   title="Download"
+                    //   >
+                    //   <Download size={16} className="text-gray-700" />
+                    // </a>
+                    // </div>
+
+                    <>
+                      {message.image.startsWith("data:image/") ? (
+                        // ✅ Image Preview Section
+                        <div className="relative inline-block">
+                          <img
+                            src={message.image}
+                            alt="Attachment"
+                            className="msgImg"
+                          />
+                          <a
+                            href={message.image}
+                            download={message.imageName}
+                            className="absolute top-2 right-2 bg-white/80 p-1 rounded-full hover:bg-gray-200 transition"
+                            title="Download"
+                          >
+                            <Download size={16} className="text-gray-700" />
+                          </a>
+                        </div>
+                      ) : (
+                        // 📁 Non-image File Section
+                        <div className="flex items-center gap-2 bg-gray-100 p-2 rounded-md">
+                          <File size={20} className="text-gray-700" />
+                          <span className="text-md max-w-[200px] text-black break-words">{message.imageName}</span>
+                          <a
+                            href={message.image}
+                            download={message.imageName}
+                            title="Download"
+                            className="ml-auto bg-white p-1 rounded-full hover:bg-gray-200 transition"
+                          >
+                            <Download size={16} className="text-gray-700" />
+                          </a>
+                        </div>
+                      )}
+                    </>
                   )}
                   {message.text && <p>{message.text}</p>}
                 </div>
@@ -197,7 +255,20 @@ const ChatBox = () => {
         {imagePreview && (
           <div className="image-preview-container">
             <div className="image-wrapper">
-              <img src={imagePreview} alt="Preview" className="imagePreview" />
+              {/* <img src={imagePreview} alt="Preview" className="imagePreview" /> */}
+
+              {imagePreview.startsWith("data:image/") ? (
+                // ✅ Show image preview
+                <img src={imagePreview} alt="Preview" className="imagePreview" />
+              ) : (
+                // 📁 Show file name instead of preview
+                <div>
+                <File size={18} className="text-gray-600" />
+                <span className="text-sm text-black break-words max-w-[200px]">
+                  {imageName}
+                </span>
+                </div>
+              )}
               <button onClick={removeImage} className="remove-image-button" type="button">
                 <X className="remove-icon" />
               </button>
@@ -231,7 +302,7 @@ const ChatBox = () => {
             />
             <input
               type="file"
-              accept="image/*"
+              accept="file"
               hidden
               ref={fileInputRef}
               onChange={handleImageChange}
@@ -242,7 +313,7 @@ const ChatBox = () => {
               className="gallery-button"
               onClick={() => fileInputRef.current?.click()}
             >
-              <img src={assets.gallery_icon} alt="Gallery" />
+              <Paperclip size={20} className="text-gray-700" />
             </button>
 
             <button type="button" onClick={() => setShowDateTimePicker(true)}>
@@ -272,21 +343,31 @@ const ChatBox = () => {
 
               <input
               type="file"
-              accept="image/*"
+              accept="file"
               className="hidden"
               ref={scheduledFileInputRef}
               onChange={(e) => handleScheduledImage(e)}
               />
               {!scheduledImgPreview ? (
                 <button className="schedule-img" onClick={() => scheduledFileInputRef.current?.click()}>
-                  <img src={assets.gallery_icon} alt="Select" />
+                  <Paperclip size={20} className="text-gray-500" />
                 </button>
               ) : (
                 <div className="schedule-img-preview" onClick={() => scheduledFileInputRef.current?.click()}>
-                  <img src={scheduledImgPreview} alt="Selected"/>
-                </div>
-              )}
-
+                  {scheduledImgPreview.startsWith("data:image/") ? (
+                    // ✅ Show image preview
+                    <img src={scheduledImgPreview} alt="Selected"/>
+                  ) : (
+                    // 📁 Show file name instead of preview
+                    <div>
+                    <File size={18} className="text-gray-600" />
+                    <span className="text-sm text-black break-words max-w-[200px]">
+                      {scheduledImgName}
+                    </span>
+                    </div>
+                  )}
+                    </div>
+                  )}
               <button className="confirm-btn" onClick={handleScheduleMessage}>Send</button>
             </div>
           )}

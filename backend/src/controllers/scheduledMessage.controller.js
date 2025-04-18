@@ -25,22 +25,25 @@ export const getScheduledMessages = async(req, res) => {
 
 export const sendScheduledMessage = async(req, res) => {
     try {
-        const { text, image, scheduledTime  } = req.body;
+        console.log("In scheduled message controller");
+        const { text, image, imageName, scheduledTime } = req.body;
         const { id: receiverId } = req.params;
         const senderId = req.user._id;
+        console.log(text, imageName);
 
-        let imgurl;
-        if(image) {
-            //upload base64 image to cloudinary
-            const uploadResponse = await cloudinary.uploader.upload(image);
-            imgurl = uploadResponse.secure_url;
-        }
+        // let imgurl;
+        // if(image) {
+        //     //upload base64 image to cloudinary
+        //     const uploadResponse = await cloudinary.uploader.upload(image);
+        //     imgurl = uploadResponse.secure_url;
+        // }
 
         const newScheduledMessage = new ScheduledMessage({
             senderId,
             receiverId,
             text,
-            image: imgurl,
+            image,
+            imageName,
             scheduledTime,
             status: "pending",
         });
@@ -49,7 +52,7 @@ export const sendScheduledMessage = async(req, res) => {
 
         res.status(200).json(newScheduledMessage);
     } catch (error) {
-        console.log("Error in sendMessage controller"+ error.message);
+        console.log("Error in sendScheduledMessage controller "+ error.message);
         res.status(500).json({message: "Internal server error"});
     }
 };
@@ -75,6 +78,7 @@ cron.schedule('* * * * *', async () => {
                 receiverId: message.receiverId,
                 text: message.text,
                 image: message.image,
+                imageName: message.imageName,
             });
 
             await newMessage.save();

@@ -18,7 +18,8 @@ dotenv.config();    // Ensure .env file is loaded
 const PORT = process.env.PORT;
 const __dirname = path.resolve();
 
-app.use(express.json());
+app.use(express.json({ limit: '20mb' }));
+app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 app.use(cookieParser());
 app.use(cors({
     origin: "http://localhost:5173",

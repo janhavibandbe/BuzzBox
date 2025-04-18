@@ -45,8 +45,8 @@
   flex: 1;
   overflow-y: auto;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  flex-direction: column-reverse;
+  /* justify-content: flex-end; */
 }
 .s-msg,.r-msg{
   display: flex;
@@ -110,6 +110,8 @@
   
   .image-wrapper {
     position: relative;
+    border: 0.1rem solid #ccc;
+    padding: 0.5rem;
   }
   
   .image-wrapper .imagePreview {

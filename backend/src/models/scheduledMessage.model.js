@@ -18,6 +18,9 @@ const messageScheduleSchema = new mongoose.Schema(
        image: {
         type: String,
        },
+       imageName: {
+        type: String,
+       },
        scheduledTime: { 
         type: Date, 
         required: true 

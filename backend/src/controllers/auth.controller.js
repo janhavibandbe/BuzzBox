@@ -138,6 +138,20 @@ export const logout = (req, res) => {
     }
 }
 
+export const getProfile = async(req, res) => {
+    try {
+        const userId = req.user._id;
+
+        const user = await User.findById(userId);
+
+        res.status(200).json(user);
+
+    } catch (error) {
+        console.log("Error in updateProfile controller"+ error.message);
+        res.status(500).json({message: "Internal server error"});
+    }
+};
+
 export const updateProfile = async(req, res) => {
     try {
         const {fullName, profilePic} = req.body;

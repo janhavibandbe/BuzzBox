@@ -7,12 +7,21 @@ import {useAuthStore} from '../../store/useAuthStore';
 import toast from 'react-hot-toast';
 
 function ProfileUpdate() {
-  const { updateProfile } = useAuthStore();
+  const { getProfile, updateProfile, authUser } = useAuthStore();
 
   const [image, setImage] = useState(null);
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
+  const getUserInfo = async() => {
+    await getProfile();
+    setName(authUser.fullName);
+    setImage(authUser.profilePic);
+  }
 
   const handleScheduledImageChange = (e) => {
     debugger;
@@ -39,9 +48,6 @@ function ProfileUpdate() {
         fullName: name,
         profilePic: image,
       });
-
-      setName('');
-      setImage(null);
     } catch (error) {
       console.error("Failed to update profile: ", error);
     }
