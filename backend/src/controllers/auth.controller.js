@@ -1,5 +1,5 @@
 import cloudinary from "../lib/cloudinary.js";
-import { generateToken, generateOTP, sendOTPEmail } from "../lib/utils.js";
+import { generateToken, generateOTP, sendOTPEmail, sendForgotPasswordEmail } from "../lib/utils.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 
@@ -157,21 +157,13 @@ export const updateProfile = async(req, res) => {
         const {fullName, profilePic} = req.body;
         const userId = req.user._id;
 
-        // if(!profilePic){
-        //     return res.status(400).json({message: "Profile pic is Required"});
-        // }
         const updatedFields = {};
         if (fullName) updatedFields.fullName = fullName;
         console.log("first", updatedFields);
         if (profilePic) {
-            console.log("Uploading profilePic...");
-            console.log(profilePic);
             const uploadResponse = await cloudinary.uploader.upload(profilePic);
-            console.log("upload complete", uploadResponse);
             updatedFields.profilePic = uploadResponse.secure_url;
-            console.log("Upload successful.");
         }
-        console.log(updatedFields);
 
         const updatedUser = await User.findByIdAndUpdate(userId, updatedFields, { new: true });
 
@@ -181,6 +173,67 @@ export const updateProfile = async(req, res) => {
         console.log("Error in updateProfile controller"+ error.message);
         res.status(500).json({message: "Internal server error"});
     }
+};
+
+export const forgotPassword = async(req, res) => {
+    const {email} = req.body;
+    try {
+        const user = await User.findOne({email});
+
+        if(!user){
+            return res.status(400).json({message: "Email is not registerd"});
+        }
+
+        const otp = await generateOTP();
+        await sendForgotPasswordEmail(email, otp);
+
+        const updatedFields = {};
+        updatedFields.otp = otp;
+        const updatedOtp = await User.findByIdAndUpdate(email, updatedFields, { new: true });
+        res.status(200).json(updatedOtp);
+    } catch (error) {
+        console.log("Error in forgotPassword controller"+ error.message);
+        res.status(500).json({message: "Internal server error"});
+    }
+};
+
+export const verifyOtpForPassword = async(req, res) => {
+    const {otp, email} = req.body;
+    try{
+        const user = await User.findOne({ email });
+
+        if (user.otp !== otp) {
+            return res.status(400).json({ message: "Invalid OTP" });
+        }
+
+        res.status(200).send("OTP verified successfully");
+    }
+    catch (error) {
+        console.log("Error in verifyOtpForPassword controller"+ error.message);
+        res.status(500).json({message: "Internal server error"});
+    }
+}; 
+
+export const updatePassword = async(res, req) => {
+    const {password, email} = req.body;
+try {
+    if(!password){
+        return res.status(400).json({message: "No password provided"});
+    }
+    if(password.length<6){
+        return res.status(400).json({message: "Password length must be greater than 6 characters"});
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const updatedFields = {};
+    updatedFields.password = hashedPassword;
+    const updatedPassword = await User.findByIdAndUpdate(email, updatedFields, { new: true });
+    res.status(200).json(updatedPassword);
+} catch (error) {
+    console.log("Error in updatePassword controller"+ error.message);
+    res.status(500).json({message: "Internal server error"});
+}
 };
 
 export const checkAuth = (req, res) => {

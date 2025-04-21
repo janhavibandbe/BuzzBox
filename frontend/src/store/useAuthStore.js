@@ -16,7 +16,6 @@ export const useAuthStore = create((set, get) => ({
     verifyEmail: null,
 
     checkAuth: async () => {
-        debugger;
         try {
             const res = await axiosInstance.get("/auth/check");
 
@@ -48,7 +47,6 @@ export const useAuthStore = create((set, get) => ({
     },
 
     verifyOtp: async (data) => {
-        debugger;
         try{
             data.email = get().verifyEmail;
             console.log(data);
@@ -66,7 +64,6 @@ export const useAuthStore = create((set, get) => ({
     },
 
     login: async (data) => {
-        debugger;
         set({isLoggingIn : true});
         try {
             const res = await axiosInstance.post("/auth/login", data);
@@ -94,7 +91,6 @@ export const useAuthStore = create((set, get) => ({
     },
 
     getProfile: async () => {
-        debugger;
         try {
             const res = await axiosInstance.get("/auth/get-profile");
             set({authUser: res.data});
@@ -119,7 +115,6 @@ export const useAuthStore = create((set, get) => ({
     },
 
     connectSocket: () => {
-        debugger;
         const { authUser } = get();
         if (!authUser || get().socket?.connected) return;
 

@@ -7,10 +7,11 @@ import { formatMessageTime, convertISTtoUTC } from '../../lib/utils';
 import { Smile, X, Download, File, Paperclip  } from 'lucide-react';
 import toast from 'react-hot-toast';
 import EmojiPicker from 'emoji-picker-react';
+import { Link } from 'react-router-dom';
 
 const ChatBox = () => {
   const { messages, getMessages, selectedUser, setSelectedUser, subscribeToMessages, unsubscribeFromMessages} = useChatStore();
-  const { authUser, } = useAuthStore();
+  const { onlineUsers, authUser } = useAuthStore();
   const messageEndref = useRef(null);
 
   const [text, setText] = useState("");
@@ -42,7 +43,6 @@ const ChatBox = () => {
 
 
   const handleImageChange = (e) => {
-    debugger;
     const file = e.target.files[0];
     // if(!file.type.startsWith("image/")){
     //   toast.error("Please select an image file");
@@ -92,7 +92,6 @@ const ChatBox = () => {
   };
 
   const handleScheduledImage = async(e) => {
-    debugger;
     const file = e.target.files[0];
     setScheduledImgName(file.name);
     if (file) {
@@ -105,7 +104,6 @@ const ChatBox = () => {
   };
 
   const handleScheduleMessage = async(e) => {
-    debugger;
     e.preventDefault();
     if(!scheduledText.trim() && !scheduledImgPreview && !scheduledDateTime) {
       toast.error("Please enter time and message");
@@ -153,11 +151,19 @@ const ChatBox = () => {
   return (
      <div className='chat-box'>
         <div className="chat-user">
-          <img src={selectedUser.profilePic || "/avatar.png"} alt="" />
-          <p>{authUser._id==selectedUser._id ? `${selectedUser.fullName} (You)`: `${selectedUser.fullName}`} 
-            <img className='dot' src={assets.green_dot} alt="" />
+          <img src={selectedUser.profilePic || "/avatar.png"} alt="" className='chat-profile'/>
+          <p>
+            {authUser._id==selectedUser._id ? `${selectedUser.fullName} (You)`: `${selectedUser.fullName}`} 
+            {onlineUsers.includes(selectedUser._id) ? 
+              <img className='dot' src={assets.green_dot} alt="" /> 
+              : 
+              ""
+            }
           </p>
-          <img src={assets.help_icon} className='help' alt="" />
+          <Link to={"/profileUpdate"}>
+            <img src={assets.help_icon} className='help' alt="" />
+          </Link>
+          
 
           <button onClick={() => setSelectedUser(null)}>
           <X />
@@ -177,21 +183,6 @@ const ChatBox = () => {
               >
                 <div className="msg">
                   {message.image && (
-                    // <div className="relative inline-block">
-                    // <img
-                    //   src={message.image}
-                    //   alt="Attachment"
-                    //   className="msgImg"
-                    // />
-                    // <a href={message.image}
-                    //   download={message.imageName}
-                    //   className="absolute top-2 right-2 bg-white/80 p-1 rounded-full hover:bg-gray-200 transition"
-                    //   title="Download"
-                    //   >
-                    //   <Download size={16} className="text-gray-700" />
-                    // </a>
-                    // </div>
-
                     <>
                       {message.image.startsWith("data:image/") ? (
                         // ✅ Image Preview Section

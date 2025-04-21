@@ -11,7 +11,6 @@ export const useChatStore = create((set, get) => ({
     isMessagesLoading: false,
 
     getUsers: async () => {
-        debugger;
         set({isUsersLoading: true});
 
         try {
@@ -25,12 +24,12 @@ export const useChatStore = create((set, get) => ({
     },
 
     getMessages: async (userId) => {
-        debugger;
         set({isMessagesLoading: true});
 
         try {
             const res = await axiosInstance.get(`/message/${userId}`);
-            set({messages: res.data});
+            const sortedMessages = res.data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+            set({messages: sortedMessages});
             console.log(res.data);
         } catch (error) {
             toast.error(error.response.data.message);
@@ -40,7 +39,6 @@ export const useChatStore = create((set, get) => ({
     },
 
     sendMessages: async (messageData) => {
-        debugger;
         const { selectedUser, messages } = get();
 
         try {
@@ -54,7 +52,6 @@ export const useChatStore = create((set, get) => ({
     },
 
     sendScheduledMessages: async (scheduledMessageData) => {
-        debugger;
         const { selectedUser, messages } = get();
 
         try {

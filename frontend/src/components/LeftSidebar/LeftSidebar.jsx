@@ -3,12 +3,13 @@ import './LeftSidebar.css'
 import assets from '../../assets/assets'
 import { useChatStore } from '../../store/useChatStore';
 import { useAuthStore } from '../../store/useAuthStore';
-import { Link } from 'react-router-dom';
+
 
 const LeftSidebar = () => {
-    const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } = useChatStore();
+    const { getUsers, users, selectedUser, setSelectedUser } = useChatStore();
     const { logout, authUser } = useAuthStore();
     const [isSubMenuVisible, setIsSubMenuVisible] = useState(false);
+    const [search, setSearch] = useState("");
 
     const toggleSubMenu = () => {
         setIsSubMenuVisible(prevState => !prevState);
@@ -19,6 +20,9 @@ const LeftSidebar = () => {
     }, [getUsers] );
 
     // if(isUsersLoading) return <SidebarSkeleton/>
+    const filteredUsers = users.filter((user) =>
+        user.fullName.toLowerCase().includes(search.toLowerCase())
+    );
 
     return (
         <div className='ls'>
@@ -31,10 +35,6 @@ const LeftSidebar = () => {
                 </div>
                 {isSubMenuVisible && (
                     <div className="sub-menu">
-                        <Link to={"/profileUpdate"} className="sub-menu-options">
-                            <p>Update Profile</p>
-                        </Link>
-                        <hr />
                         <div onClick={logout}>
                             <p>Logout</p>
                         </div>
@@ -44,13 +44,16 @@ const LeftSidebar = () => {
           </div>
           <div className="ls-search">
               <img src={assets.search_icon} alt="" />
-              <input type="text" placeholder='Search here..' />
+              <input 
+                type="text" 
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder='Search here..' />
           </div>
          </div>
 
 
          <div className="ls-list">
-            {users.map((user)=>(
+            {filteredUsers.map((user)=>(
              <div  key={user._id} onClick={() => setSelectedUser(user)}
                 className={`friends ${selectedUser && selectedUser._id === user._id ? "selectedFriend": ""}`}>
                 <img src={user.profilePic || "/avatar.png"} alt="" />
@@ -62,7 +65,7 @@ const LeftSidebar = () => {
           )) }
 
         
-            {users.length === 0 && (
+            {filteredUsers.length === 0 && (
                 <div className="userNotFound">User Not fround</div>
             )}
           </div>

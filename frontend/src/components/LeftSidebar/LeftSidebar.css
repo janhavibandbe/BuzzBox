@@ -99,12 +99,7 @@
     text-decoration: none;
     color: black;
 }
-.sub-menu hr{
-    border: none;
-    height: 1px;
-    background: #a4a4a4;
-    margin: 8px 0px;
-}
+
 .sub-menu{
     cursor: pointer;
     font-size: 14px;

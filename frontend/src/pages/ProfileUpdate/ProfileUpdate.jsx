@@ -24,7 +24,6 @@ function ProfileUpdate() {
   }
 
   const handleScheduledImageChange = (e) => {
-    debugger;
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
