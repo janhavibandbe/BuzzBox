@@ -109,6 +109,7 @@ export const login = async(req, res) => {
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if(!isPasswordCorrect){
             res.status(400).json({message: "Invalid Credential"});
+            return;
         }
 
         generateToken(user._id, res);
@@ -175,27 +176,31 @@ export const updateProfile = async(req, res) => {
     }
 };
 
-export const forgotPassword = async(req, res) => {
-    const {email} = req.body;
+export const forgotPassword = async (req, res) => {
+    const { email } = req.body;
+  
     try {
-        const user = await User.findOne({email});
-
-        if(!user){
-            return res.status(400).json({message: "Email is not registerd"});
-        }
-
-        const otp = await generateOTP();
-        await sendForgotPasswordEmail(email, otp);
-
-        const updatedFields = {};
-        updatedFields.otp = otp;
-        const updatedOtp = await User.findByIdAndUpdate(email, updatedFields, { new: true });
-        res.status(200).json(updatedOtp);
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        return res.status(400).json({ message: "Email is not registered" });
+      }
+  
+      const otp = await generateOTP();
+      await sendForgotPasswordEmail(email, otp);
+  
+      const updatedOtp = await User.findOneAndUpdate(
+        { email },
+        { otp },
+        { new: true }
+      );
+  
+      res.status(200).json(updatedOtp);
     } catch (error) {
-        console.log("Error in forgotPassword controller"+ error.message);
-        res.status(500).json({message: "Internal server error"});
+      console.log("Error in forgotPassword controller: " + error.message);
+      res.status(500).json({ message: "Internal server error" });
     }
-};
+  };
 
 export const verifyOtpForPassword = async(req, res) => {
     const {otp, email} = req.body;
@@ -214,8 +219,8 @@ export const verifyOtpForPassword = async(req, res) => {
     }
 }; 
 
-export const updatePassword = async(res, req) => {
-    const {password, email} = req.body;
+export const updatePassword = async(req, res) => {
+    const { email, password } = req.body;
 try {
     if(!password){
         return res.status(400).json({message: "No password provided"});
@@ -228,7 +233,7 @@ try {
 
     const updatedFields = {};
     updatedFields.password = hashedPassword;
-    const updatedPassword = await User.findByIdAndUpdate(email, updatedFields, { new: true });
+    const updatedPassword = await User.findOneAndUpdate({email}, updatedFields, { new: true });
     res.status(200).json(updatedPassword);
 } catch (error) {
     console.log("Error in updatePassword controller"+ error.message);

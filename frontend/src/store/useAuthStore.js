@@ -78,6 +78,43 @@ export const useAuthStore = create((set, get) => ({
         }
     },
 
+    forgotPassword: async(data) => {
+        debugger;
+        try{
+            var email = data;
+            const res = await axiosInstance.put("/auth/forgot-password", { email: data });
+            toast.success("OTP has been send");
+        }
+        catch (error) {
+            toast.error(error.response.data.message);
+        } finally{
+            
+        }
+    },
+
+    verifyOtpForForgotPassword: async(data) => {
+        debugger;
+        try{
+            const res = await axiosInstance.post("/auth/verifyOtpForPassword", data);
+            toast.success("OTP verified successfully");
+        }
+        catch (error) {
+            toast.error(error.response.data.message);
+        }
+    },
+
+    updatePassord: async(data) => {
+        try{
+            debugger;
+            console.log(data);
+            const res = await axiosInstance.put("/auth/update-password", data);
+            toast.success("Password updated successfully");
+        }
+        catch (error) {
+            toast.error(error.response.data.message);
+        }
+    },
+
     logout: async () => {
         try {
             await axiosInstance.post("/auth/logout");

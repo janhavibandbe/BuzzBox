@@ -60,6 +60,12 @@ const Login = () => {
             Don't have an account? Sign up
           </Link>
         </div>
+
+        <div className="mt-4 text-center">
+          <Link to="/EmailForForgotPassword" className="text-blue-500 hover:underline">
+            Forgot password?
+          </Link>
+        </div>
       </div>
     </div>
   );
