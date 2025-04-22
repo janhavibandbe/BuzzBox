@@ -10,7 +10,7 @@ import { Toaster } from 'react-hot-toast';
 import VerifyOtp from './pages/VerifyOtp/VerifyOtp';
 import VerifyOtpForForgotPassword from './pages/VerifyOtpForForgotPassword/VerifyOtpForForgotPassword';
 import EmailForForgotPassword from './pages/EmailForForgotPassword/EmailForForgotPassword';
-import UpdatePassword from './pages/updatePassword/UpdatePassword';
+import UpdatePassword from './pages/PasswordHelper/UpdatePassword';
 
 function App() {
   const { authUser, checkAuth, isCheckingAuth, isForgotPasswordOtpCorrect, isForgotPasswordOtpVerified } = useAuthStore();
@@ -35,8 +35,8 @@ function App() {
       <Routes>
         <Route path="/login" element={!authUser ? <Login /> : <Navigate to="/chat" />} />
         <Route path="/EmailForForgotPassword" element={ <EmailForForgotPassword /> } />
-        <Route path="/verifyOtpForForgotPassword/:email" element={<VerifyOtpForForgotPassword /> } />
-        <Route path="/UpdatePassword/:email" element={<UpdatePassword/>}/>
+        <Route path="/verifyOtpForForgotPassword/:email" element={ <VerifyOtpForForgotPassword /> } />
+        <Route path="/UpdatePassword/:email" element={ <UpdatePassword/> }/>
         <Route path="/signup" element={!authUser ? <Signup /> : <Navigate to="/chat" />} />
         <Route path="/verifyotp" element={!authUser ? <VerifyOtp /> : <Navigate to="/chat" />} />
         <Route path="/chat" element={authUser ? <Chat /> : <Navigate to="/login" />} />
